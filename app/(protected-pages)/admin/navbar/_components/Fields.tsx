@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Button, Row, Col, Input, Select, Space } from 'antd';
 
 export function Fields() {
-  const [selectedLang, setSelectedLang] = useState('');
+  const [selectedLang, setSelectedLang] = useState('en');
 
   const handleChange = (value: string) => {
     setSelectedLang(value)
