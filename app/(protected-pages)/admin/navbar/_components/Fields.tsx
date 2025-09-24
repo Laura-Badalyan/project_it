@@ -147,7 +147,7 @@ export function Fields() {
                 style={{ width: '100%' }}
               />
             </Col>
-            <Col span={6}>
+            <Col span={8}>
               <Input
                 value={item.label}
                 onChange={(e) => handleUpdate(item.id, 'label', e.target.value)}

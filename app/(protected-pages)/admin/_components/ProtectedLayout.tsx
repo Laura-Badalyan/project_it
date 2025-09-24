@@ -32,12 +32,11 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem(<Link href="/admin/dashboard">Dashboard</Link>, '1', <PieChartOutlined />),
-  getItem(<Link href="/admin/navbar">Navbar</Link>, '2', <DesktopOutlined />),
+  getItem(<Link href="/admin/dashboard">Dashboard</Link>, '/admin/dashboard', <PieChartOutlined />),
+  getItem(<Link href="/admin/navbar">Navbar</Link>, '/admin/navbar', <DesktopOutlined />),
   getItem('Home Page', 'sub1', <UserOutlined />, [
-    getItem('Top Products', '3'),
-    getItem('Bill', '4'),
-    getItem('Alex', '5'),
+    getItem(<Link href="/admin/home/services">Services</Link>, '/admin/home/services', <DesktopOutlined />),
+    getItem('Alex', '/admin/home/alex'),
   ]),
   getItem('Team', 'sub2', <TeamOutlined />, [
     getItem('Team 1', '6'),
