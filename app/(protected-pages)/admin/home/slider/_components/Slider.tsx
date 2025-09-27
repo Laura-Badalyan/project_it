@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { Button, Row, Col, Input, Select, Space, InputNumber, Modal, Switch, Upload, message, Tooltip } from 'antd';
 import { DeleteOutlined, PlusOutlined, UploadOutlined, EyeOutlined } from '@ant-design/icons';
 import type { UploadFile, UploadProps } from 'antd';
+import Image from 'next/image';
 
 type SliderItem = {
   id: string;
@@ -230,7 +231,6 @@ export function Slider() {
                     value={item.description}
                     onChange={(e) => handleUpdate(item.id, 'description', e.target.value)}
                     placeholder={descriptionText[selectedLang]}
-                    rows={2}
                   />
                 </Tooltip>
               </Col>
@@ -239,10 +239,25 @@ export function Slider() {
                 <Space direction="vertical" style={{ width: '100%' }}>
                   {item.image ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <img
+                      <Image
                         src={item.image}
                         alt="Slider preview"
-                        style={{ width: 50, height: 30, objectFit: 'cover', borderRadius: 4 }}
+                        width={50}
+                        height={30}
+                        style={{ objectFit: 'cover', borderRadius: 4 }}
+                        placeholder="blur"
+                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaUMk6MeobSfWUUKBF4I9w6kNNqLUwX4z1//9k="
+                        loading="lazy"
+                        quality={75}
+                        sizes="50px"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                        onLoad={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'block';
+                        }}
                       />
                       <Button
                         size="small"
