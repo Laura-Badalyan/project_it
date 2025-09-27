@@ -1,5 +1,6 @@
 "use client";
 
+import '@ant-design/v5-patch-for-react-19';
 import React from "react";
 import { Form, Input, Button, Card } from "antd";
 
@@ -20,7 +21,10 @@ export default function LoginForm() {
         <Form.Item
           name="email"
           label="Email"
-          rules={[{ required: true, type: "email" }]}
+          rules={[
+            { required: true, message: "Email is required" },
+            { type: "email", message: "Enter a valid email" },
+          ]}
         >
           <Input placeholder="Enter your email" />
         </Form.Item>

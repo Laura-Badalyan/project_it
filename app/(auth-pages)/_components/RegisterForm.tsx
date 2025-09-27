@@ -1,5 +1,6 @@
 "use client";
 
+import '@ant-design/v5-patch-for-react-19';
 import React from "react";
 import { Form, Input, Button, Card } from "antd";
 
@@ -30,7 +31,10 @@ export default function RegisterForm() {
         <Form.Item
           name="email"
           label="Email"
-          rules={[{ required: true, type: "email" }]}
+          rules={[
+            { required: true, message: "Email is required" },
+            { type: "email", message: "Enter a valid email" },
+          ]}
         >
           <Input placeholder="Enter your email" />
         </Form.Item>
@@ -38,7 +42,7 @@ export default function RegisterForm() {
         <Form.Item
           name="password"
           label="Password"
-          rules={[{ required: true }]}
+          rules={[{ required: true, message: "Password is required" }]}
         >
           <Input.Password placeholder="Enter your password" />
         </Form.Item>
@@ -46,7 +50,20 @@ export default function RegisterForm() {
         <Form.Item
           name="confirmPassword"
           label="Confirm Password"
-          rules={[{ required: true }]}
+          dependencies={["password"]}
+          rules={[
+            { required: true, message: "Please confirm your password" },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue("password") === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject(
+                  new Error("Passwords do not match!")
+                );
+              },
+            }),
+          ]}
         >
           <Input.Password placeholder="Confirm your password" />
         </Form.Item>

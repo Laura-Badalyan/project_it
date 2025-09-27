@@ -7,6 +7,8 @@ import {
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
+  AppstoreOutlined,
+  PictureOutlined
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu, theme, Spin } from 'antd';
@@ -35,8 +37,8 @@ const items: MenuItem[] = [
   getItem(<Link href="/admin/dashboard">Dashboard</Link>, '/admin/dashboard', <PieChartOutlined />),
   getItem(<Link href="/admin/navbar">Navbar</Link>, '/admin/navbar', <DesktopOutlined />),
   getItem('Home Page', 'sub1', <UserOutlined />, [
-    getItem(<Link href="/admin/home/services">Services</Link>, '/admin/home/services', <DesktopOutlined />),
-    getItem('Alex', '/admin/home/alex'),
+    getItem(<Link href="/admin/home/services">Services</Link>, '/admin/home/services', <AppstoreOutlined />),
+    getItem(<Link href="/admin/home/slider">Slider</Link>, '/admin/home/slider', <PictureOutlined />),
   ]),
   getItem('Team', 'sub2', <TeamOutlined />, [
     getItem('Team 1', '6'),
