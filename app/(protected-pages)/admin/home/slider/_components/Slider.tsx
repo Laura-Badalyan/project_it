@@ -162,7 +162,7 @@ export function Slider() {
   };
 
   const uploadProps: UploadProps = {
-    beforeUpload: (file, fileList) => {
+    beforeUpload: (file) => {
       const isImage = file.type.startsWith('image/');
       if (!isImage) {
         message.error('You can only upload image files!');
@@ -185,7 +185,6 @@ export function Slider() {
 
   const saveText = { en: 'Save', am: 'Պահպանել', ru: 'Сохранить' };
   const descriptionText = { en: 'Description', am: 'Նկարագրություն', ru: 'Описание' };
-  const imageText = { en: 'Image', am: 'Պատկեր', ru: 'Изображение' };
   const uploadText = { en: 'Upload', am: 'Վերբեռնել', ru: 'Загрузить' };
 
   return (
@@ -235,8 +234,21 @@ export function Slider() {
                 </Tooltip>
               </Col>
 
-              <Col span={6}>
-                <Space direction="vertical" style={{ width: '100%' }}>
+              <Col span={14}>
+                <Space>
+                  <Button type="primary" onClick={() => handleSave(item.id)}>
+                    {saveText[selectedLang]}
+                  </Button>
+
+                  <Button danger onClick={() => handleRemove(item.id)}>
+                    <DeleteOutlined />
+                  </Button>
+
+                  <Switch
+                    checked={item.visible}
+                    onChange={(checked) => handleToggleVisibility(item.id, checked)}
+                  />
+                
                   {item.image ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <Image
@@ -288,22 +300,7 @@ export function Slider() {
                 </Space>
               </Col>
 
-              <Col span={8}>
-                <Space>
-                  <Button type="primary" onClick={() => handleSave(item.id)}>
-                    {saveText[selectedLang]}
-                  </Button>
-
-                  <Button danger onClick={() => handleRemove(item.id)}>
-                    <DeleteOutlined />
-                  </Button>
-
-                  <Switch
-                    checked={item.visible}
-                    onChange={(checked) => handleToggleVisibility(item.id, checked)}
-                  />
-                </Space>
-              </Col>
+           
             </Row>
           ))}
         </Space>
