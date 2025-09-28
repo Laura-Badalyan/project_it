@@ -2,10 +2,8 @@
 
 import '@ant-design/v5-patch-for-react-19';
 import { useState, useEffect } from 'react';
-import { Button, Row, Col, Input, Select, Space, InputNumber, Modal, Switch, Upload, message, Tooltip } from 'antd';
-import { DeleteOutlined, PlusOutlined, UploadOutlined, EyeOutlined } from '@ant-design/icons';
-import type { UploadFile, UploadProps } from 'antd';
-import Image from 'next/image';
+import { Button, Row, Col, Input, Select, Space, InputNumber, Modal, Switch, message, Tooltip } from 'antd';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 
 type SliderItem = {
   id: string;
@@ -29,8 +27,6 @@ export function Slider() {
   const [data, setData] = useState<Record<Lang, SliderItem[]>>(initialSliderData);
   const [localData, setLocalData] = useState<SliderItem[]>([]);
   const [modal, contextHolder] = Modal.useModal();
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     setLocalData(data[selectedLang].map(item => ({ ...item })));
@@ -41,7 +37,7 @@ export function Slider() {
   };
 
   const handleAddSlider = () => {
-    const newId = `slider-${Date.now()}`;
+    const newId = Math.max(...localData.map(i => i.id), 0) + 1;
     const maxOrder = localData.length > 0 ? Math.max(...localData.map(i => i.order)) : 0;
     const newItem: SliderItem = {
       id: newId,
@@ -86,7 +82,7 @@ export function Slider() {
 
       const updatedItem = updatedLocal.find(item => item.id === id);
       if (updatedItem) {
-        console.log('Updated slider item:', { ...updatedItem, lang: selectedLang });
+        // console.log('Updated slider item:', { ...updatedItem, lang: selectedLang });
       }
 
       return updatedLocal;
@@ -148,44 +144,8 @@ export function Slider() {
     });
   };
 
-  const handleImageUpload = (id: string, file: File) => {
-    setUploading(true);
-
-    setTimeout(() => {
-      const imageUrl = URL.createObjectURL(file);
-      handleUpdate(id, 'image', imageUrl);
-      setUploading(false);
-      message.success('Image uploaded successfully');
-
-      console.log('Uploaded image for slider:', { id, imageUrl, lang: selectedLang });
-    }, 1000);
-  };
-
-  const uploadProps: UploadProps = {
-    beforeUpload: (file) => {
-      const isImage = file.type.startsWith('image/');
-      if (!isImage) {
-        message.error('You can only upload image files!');
-        return false;
-      }
-
-      const isLt5M = file.size / 1024 / 1024 < 5;
-      if (!isLt5M) {
-        message.error('Image must be smaller than 5MB!');
-        return false;
-      }
-
-      return true;
-    },
-    fileList,
-    onChange: ({ fileList: newFileList }) => {
-      setFileList(newFileList);
-    },
-  };
-
   const saveText = { en: 'Save', am: 'Պահպանել', ru: 'Сохранить' };
   const descriptionText = { en: 'Description', am: 'Նկարագրություն', ru: 'Описание' };
-  const uploadText = { en: 'Upload', am: 'Վերբեռնել', ru: 'Загрузить' };
 
   return (
     <>
@@ -224,12 +184,21 @@ export function Slider() {
                 />
               </Col>
 
-              <Col span={8}>
+              <Col span={4}>
                 <Tooltip title={item.description}>
                   <Input
                     value={item.description}
                     onChange={(e) => handleUpdate(item.id, 'description', e.target.value)}
                     placeholder={descriptionText[selectedLang]}
+                  />
+                </Tooltip>
+              </Col>
+
+              <Col span={4}>
+                <Tooltip title={item.description}>
+                  <Input
+                    value={item.image}
+                    onChange={(e) => handleUpdate(item.id, 'image', e.target.value)}
                   />
                 </Tooltip>
               </Col>
@@ -248,55 +217,6 @@ export function Slider() {
                     checked={item.visible}
                     onChange={(checked) => handleToggleVisibility(item.id, checked)}
                   />
-                
-                  {item.image ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <Image
-                        src={item.image}
-                        alt="Slider preview"
-                        width={50}
-                        height={30}
-                        style={{ objectFit: 'cover', borderRadius: 4 }}
-                        placeholder="blur"
-                        blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAAIAAoDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAhEAACAQMDBQAAAAAAAAAAAAABAgMABAUGIWGRkqGx0f/EABUBAQEAAAAAAAAAAAAAAAAAAAMF/8QAGhEAAgIDAAAAAAAAAAAAAAAAAAECEgMRkf/aAAwDAQACEQMRAD8AltJagyeH0AthI5xdrLcNM91BF5pX2HaUMk6MeobSfWUUKBF4I9w6kNNqLUwX4z1//9k="
-                        loading="lazy"
-                        quality={75}
-                        sizes="50px"
-                        onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'none';
-                        }}
-                        onLoad={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.style.display = 'block';
-                        }}
-                      />
-                      <Button
-                        size="small"
-                        onClick={() => window.open(item.image, '_blank')}
-                        icon={<EyeOutlined />}
-                      >
-                        View
-                      </Button>
-                    </div>
-                  ) : (
-                    <Upload
-                      {...uploadProps}
-                      customRequest={({ file, onSuccess, onError }) => {
-                        if (file instanceof File) {
-                          handleImageUpload(item.id, file);
-                          onSuccess?.('ok');
-                        } else {
-                          onError?.(new Error('Invalid file'));
-                        }
-                      }}
-                      showUploadList={false}
-                    >
-                      <Button icon={<UploadOutlined />} loading={uploading}>
-                        {uploadText[selectedLang]}
-                      </Button>
-                    </Upload>
-                  )}
                 </Space>
               </Col>
 

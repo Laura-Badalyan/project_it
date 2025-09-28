@@ -63,10 +63,10 @@ export function Fields() {
     const handleChangeLang = (lang: Lang) => setSelectedLang(lang);
 
     const handleAddRow = () => {
-        const newId = Date.now();
+        const newId = data[selectedLang].length + 1;
         const newItem: ServiceItem = {
             id: newId,
-            order: data[selectedLang].length + 1,
+            order: newId,
             descr: '',
             visible: true
         };
@@ -108,7 +108,7 @@ export function Fields() {
                     visible: updatedItem.visible,
                     lang: selectedLang,
                 };
-                console.log('Updated item:', logObj);
+                // console.log('Updated item:', logObj);
             }
 
             return updated;

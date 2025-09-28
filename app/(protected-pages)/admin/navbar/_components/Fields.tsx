@@ -83,7 +83,7 @@ export function Fields() {
 
       const updatedItem = updatedLocal.find(item => item.id === id);
       if (updatedItem) {
-        console.log('Updated item:', { ...updatedItem, lang: selectedLang });
+        // console.log('Updated item:', { ...updatedItem, lang: selectedLang });
       }
 
       return updatedLocal;
