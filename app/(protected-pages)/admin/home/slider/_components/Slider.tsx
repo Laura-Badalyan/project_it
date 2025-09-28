@@ -37,31 +37,33 @@ export function Slider() {
   };
 
   const handleAddSlider = () => {
-    const newId = Math.max(...localData.map(i => i.id), 0) + 1;
-    const maxOrder = localData.length > 0 ? Math.max(...localData.map(i => i.order)) : 0;
-    const newItem: SliderItem = {
-      id: newId,
-      description: '',
-      image: '',
-      lang: selectedLang,
-      order: maxOrder + 1,
-      visible: true
-    };
-
-    const updatedLocal = [...localData, newItem];
-    setLocalData(updatedLocal);
-
-    const updatedData = { ...data };
-    Object.keys(updatedData).forEach(lang => {
-      updatedData[lang as Lang] = [
-        ...(updatedData[lang as Lang] || []),
-        { ...newItem, lang: lang as Lang }
-      ];
-    });
-    setData(updatedData);
-
-    console.log('Added slider item:', { ...newItem, lang: selectedLang });
+  const maxId = localData.length > 0 ? Math.max(...localData.map(i => Number(i.id))) : 0;
+  const newId = String(maxId + 1);
+  
+  const maxOrder = localData.length > 0 ? Math.max(...localData.map(i => i.order)) : 0;
+  const newItem: SliderItem = {
+    id: newId,
+    description: '',
+    image: '',
+    lang: selectedLang,
+    order: maxOrder + 1,
+    visible: true
   };
+
+  const updatedLocal = [...localData, newItem];
+  setLocalData(updatedLocal);
+
+  const updatedData = { ...data };
+  Object.keys(updatedData).forEach(lang => {
+    updatedData[lang as Lang] = [
+      ...(updatedData[lang as Lang] || []),
+      { ...newItem, lang: lang as Lang }
+    ];
+  });
+  setData(updatedData);
+
+  console.log('Added slider item:', { ...newItem, lang: selectedLang });
+};
 
   const handleUpdate = (id: string, field: keyof SliderItem, value: string | number | boolean) => {
     setLocalData((prevLocal) => {

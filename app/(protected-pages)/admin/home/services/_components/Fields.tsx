@@ -99,18 +99,6 @@ export function Fields() {
                     .sort((a, b) => a.order - b.order);
             });
 
-            const updatedItem = updated[selectedLang].find((item) => item.id === id);
-            if (updatedItem) {
-                const logObj = {
-                    id: updatedItem.id,
-                    descr: updatedItem.descr,
-                    order: updatedItem.order,
-                    visible: updatedItem.visible,
-                    lang: selectedLang,
-                };
-                // console.log('Updated item:', logObj);
-            }
-
             return updated;
         });
     };
