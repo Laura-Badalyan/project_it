@@ -9,7 +9,7 @@ export default async function Home() {
     <div className="flex flex-col items-center justify-center bg-blue-100 text-gray-800">
       <h1 className="text-4xl font-semibold">Menu from Contentful</h1>
 
-      <ul className="flex flex-wrap justify-center gap-8 text-xl m-8">
+      <ul className="flex flex-wrap justify-center gap-8 text-xl m-6">
         {fieldKeys.map((key) => (
           <li
             key={key}
